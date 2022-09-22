@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import ShowGuests from './ShowGuests';
 
-const baseUrl = 'http://localhost:4000';
+const baseUrl =
+  'https://express-guest-list-api-memory-data-store.dertimonius.repl.co';
 
 function capitalizeName(name) {
   return name

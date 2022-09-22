@@ -1,4 +1,4 @@
-import './app.css';
+import './App.css';
 import AddGuest from './components/AddGuest.js';
 
 function App() {
