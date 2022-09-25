@@ -19,31 +19,34 @@ function AddGuest() {
   const [lastName, setLastName] = useState('');
   const [isDisabled, setIsDisabled] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [changed, setChanged] = useState(false);
 
   // Fetch guest list from API
   async function fetchFromAPI() {
     const response = await fetch(`${baseUrl}/guests`);
     const allGuests = await response.json();
     setGuests(allGuests);
-    setIsDisabled(false);
-    setIsLoading(false);
+    return allGuests;
   }
   useEffect(() => {
     fetchFromAPI().catch(() => {});
+    setIsDisabled(false);
+    setIsLoading(false);
   }, []);
 
   // Add guest to API
   async function addToAPI(guest) {
-    const response = await fetch(`${baseUrl}/guests`, {
+    await fetch(`${baseUrl}/guests`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(guest),
     });
-    const createdGuest = await response.json();
-    setGuests([...guests, createdGuest]);
   }
+  useEffect(() => {
+    fetchFromAPI().catch(() => {});
+  }, [changed]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -55,17 +58,14 @@ function AddGuest() {
     addToAPI(newGuest).catch((err) => console.log(err));
     setFirstName('');
     setLastName('');
+    setChanged(!changed);
   };
 
   // Delete guest
   async function deleteFromAPI(id) {
-    const response = await fetch(`${baseUrl}/guests/${id}`, {
+    await fetch(`${baseUrl}/guests/${id}`, {
       method: 'DELETE',
     });
-    const deletedGuest = await response.json();
-    response.status === 200
-      ? setGuests(guests.filter((guest) => guest !== deletedGuest))
-      : alert('Unable to delete guest');
     fetchFromAPI().catch(() => {});
   }
   const handleRemove = (id) => {
@@ -73,33 +73,28 @@ function AddGuest() {
     deleteFromAPI(id).catch((err) => console.log(err));
   };
 
-  // Get single guest from API
-  async function getGuest(id) {
-    const response = await fetch(`${baseUrl}/guests/${id}`);
-    const guest = await response.json();
-    return guest;
+  // Delete all guests
+  async function deleteAllGuest() {
+    await Promise.all(
+      guests.map(async (guest) => {
+        const response = await fetch(`${baseUrl}/guests/${guest.id}`, {
+          method: 'DELETE',
+        });
+        await response.json();
+      }),
+    ).then(() => setGuests([]));
   }
 
   // Update attending status
-  async function toggleAttending(id) {
-    const guestToggleAttending = await getGuest(id);
-    const updatedGuest = {
-      attending: !guestToggleAttending.attending,
-    };
-    const response = await fetch(`${baseUrl}/guests/${id}`, {
+  async function toggleAttending(value, id) {
+    await fetch(`${baseUrl}/guests/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updatedGuest),
+      body: JSON.stringify({ attending: !value }),
     });
-    const updated = await response.json();
-    setGuests(
-      guests.map((guest) =>
-        guest.id === id ? { ...guest, attending: updated.attending } : guest,
-      ),
-    );
-    fetchFromAPI().catch(() => {});
+    setChanged(!changed);
   }
 
   return (
@@ -125,6 +120,7 @@ function AddGuest() {
           <button className="disable">Add Guest</button>
         </form>
       </div>
+      <button onClick={deleteAllGuest}>Delete all</button>
       {isLoading ? (
         <p>Loading...</p>
       ) : guests.length ? (
