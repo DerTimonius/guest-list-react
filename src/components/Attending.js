@@ -9,6 +9,7 @@ function Attending({ guest, onAttending }) {
         id="attending"
         checked={guest.attending}
         onChange={() => {
+          guest.attending = !guest.attending;
           onAttending(guest.attending, guest.id);
         }}
       />
