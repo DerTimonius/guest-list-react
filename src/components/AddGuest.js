@@ -14,12 +14,11 @@ function AddGuest() {
   async function fetchFromAPI() {
     const response = await fetch(`${baseUrl}/guests`);
     const allGuests = await response.json();
+    setIsLoading(false);
     setGuests(allGuests);
-    return allGuests;
   }
   useEffect(() => {
     fetchFromAPI().catch(() => {});
-    setIsLoading(false);
   }, []);
 
   // Add guest to API
