@@ -69,11 +69,17 @@ function AddGuest() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ attending: value }),
+      body: JSON.stringify({ attending: !value }),
     });
     const updatedGuest = await response.json();
-    const guestToUpdate = guests.findIndex(id);
-    setGuests((guests[guestToUpdate] = updatedGuest));
+    setGuests(
+      guests.map((guest) => {
+        if (guest.id === id) {
+          return (guest = updatedGuest);
+        }
+        return guest;
+      }),
+    );
   }
 
   return (
