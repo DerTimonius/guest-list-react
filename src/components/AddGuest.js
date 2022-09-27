@@ -77,7 +77,7 @@ function AddGuest() {
   }
 
   return (
-    <div data-test-id="guest">
+    <div>
       <div className="addGuest">
         <form
           onSubmit={(e) => {

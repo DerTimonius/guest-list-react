@@ -32,7 +32,7 @@ function ShowGuests({ guests, onRemove, onAttending }) {
           })
           .map((guest) => {
             return (
-              <div key={guest.id} className="guest">
+              <div key={guest.id} className="guest" data-test-id="guest">
                 <p>
                   {capitalizeName(guest.firstName)}{' '}
                   {capitalizeName(guest.lastName)}{' '}
