@@ -44,8 +44,6 @@ function AddGuest() {
     await fetch(`${baseUrl}/guests/${id}`, {
       method: 'DELETE',
     });
-    setGuests(guests.filter((guest) => guest.id !== id));
-    fetchFromAPI().catch(() => {});
   }
   const handleRemove = (id) => {
     deleteFromAPI(id).catch((err) => console.log(err));
@@ -66,14 +64,16 @@ function AddGuest() {
 
   // Update attending status
   async function toggleAttending(value, id) {
-    await fetch(`${baseUrl}/guests/${id}`, {
+    const response = await fetch(`${baseUrl}/guests/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ attending: value }),
     });
-    fetchFromAPI().catch(() => {});
+    const updatedGuest = await response.json();
+    const guestToUpdate = guests.findIndex(id);
+    setGuests((guests[guestToUpdate] = updatedGuest));
   }
 
   return (
