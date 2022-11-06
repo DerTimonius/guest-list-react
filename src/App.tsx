@@ -1,5 +1,5 @@
 import './App.css';
-import AddGuest from './components/AddGuest.js';
+import AddGuest from './components/AddGuest';
 
 function App() {
   return (

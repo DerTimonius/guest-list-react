@@ -4,8 +4,14 @@ import ShowGuests from './ShowGuests';
 const baseUrl =
   'https://express-guest-list-api-memory-data-store.dertimonius.repl.co';
 
+export type Guest = {
+  firstName: string;
+  lastName: string;
+  id: number;
+  attending: boolean;
+};
 function AddGuest() {
-  const [guests, setGuests] = useState([]);
+  const [guests, setGuests] = useState<Guest[]>([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -13,7 +19,7 @@ function AddGuest() {
   // Fetch guest list from API
   async function fetchFromAPI() {
     const response = await fetch(`${baseUrl}/guests`);
-    const allGuests = await response.json();
+    const allGuests: Guest[] = await response.json();
     setIsLoading(false);
     setGuests(allGuests);
   }
@@ -40,12 +46,12 @@ function AddGuest() {
   }
 
   // Delete guest
-  async function deleteFromAPI(id) {
+  async function deleteFromAPI(id: number) {
     await fetch(`${baseUrl}/guests/${id}`, {
       method: 'DELETE',
     });
   }
-  const handleRemove = (id) => {
+  const handleRemove = (id: number) => {
     deleteFromAPI(id).catch((err) => console.log(err));
     setGuests(guests.filter((guest) => guest.id !== id));
   };
@@ -63,7 +69,7 @@ function AddGuest() {
   }
 
   // Update attending status
-  async function toggleAttending(value, id) {
+  async function toggleAttending(value: boolean, id: number) {
     const response = await fetch(`${baseUrl}/guests/${id}`, {
       method: 'PUT',
       headers: {

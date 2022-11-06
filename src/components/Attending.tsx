@@ -1,4 +1,11 @@
-function Attending({ guest, onAttending }) {
+import { Guest } from './AddGuest';
+
+type Props = {
+  guest: Guest;
+  onAttending: (value: boolean, id: number) => void;
+};
+
+function Attending({ guest, onAttending }: Props) {
   return (
     <div>
       <label htmlFor="attending">Attending</label>

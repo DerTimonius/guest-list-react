@@ -4,10 +4,14 @@
   align-items: center;
   flex-direction: column;
   font-family: Georgia, 'Times New Roman', Times, serif;
+  background-image: url(./img/background.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  color: white;
 }
 
 .container {
-  /* background: red; */
   width: 720px;
   height: max-content;
   border: 1px solid darkgray;
@@ -69,9 +73,10 @@
 
 button {
   width: max-content;
-  height: 24px;
-  border-radius: 2px;
-  background-color: beige;
+  min-width: 100px;
+  height: 36px;
+  border-radius: 4px;
+  background-color: lightsteelblue;
 }
 #attending {
   width: 16px;

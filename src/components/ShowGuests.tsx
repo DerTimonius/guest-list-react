@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { Guest } from './AddGuest';
 import Attending from './Attending';
 
-function capitalizeName(name) {
+function capitalizeName(name: string) {
   return name
     .split(' ')
     .map((item) => {
@@ -10,8 +11,14 @@ function capitalizeName(name) {
     .join(' ');
 }
 
-function ShowGuests({ guests, onRemove, onAttending }) {
-  const [filter, setFilter] = useState(null);
+type Props = {
+  guests: Guest[];
+  onAttending: (value: boolean, id: number) => void;
+  onRemove: (id: number) => void;
+};
+
+function ShowGuests({ guests, onRemove, onAttending }: Props) {
+  const [filter, setFilter] = useState<string | null>(null);
 
   return (
     <div>
